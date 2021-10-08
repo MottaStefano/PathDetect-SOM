@@ -1,4 +1,5 @@
-# PathDetect-SOM: A tool to analyze pathways from MD simulation on a trained SOM.**
+# PathDetect-SOM: 
+# A tool to analyze pathways from MD simulation on a trained SOM.
 A tool for the analysis of pathways sampled in molecular dynamics simulations based on Self-Organizing Maps (SOM)
 
 PAGE   \\* MERGEFORMAT4
@@ -35,7 +36,7 @@ To install Gromacs ([www.gromacs.org](http://www.gromacs.org/)) on a ubuntu mach
 
 
 
-1. ## **Generate your first Gromacs Coordinate File**
+2. ## **Generate your first Gromacs Coordinate File**
 Once you have run MD simulations with your favorite MD engine, you need to extract a set of coordinates that will be used to evaluate the similarity among frames for the SOM training. First of all you need your simulations to be in the gromacs format (.xtc or .trr) and a reference structure file containing the same atoms as in your trajectory files in a format readable by gromacs (.pdb, .gro or .tpr). If you did not use gromacs to generate your trajectory you can use vmd or a tool for trajectory conversion such as mdconvert. Then you must ensure that the periodic boundary conditions are correctly solved in your simulation. In gromacs this will be accomplished with the gmx trjconv command using the option -pbc mol (the best option if you have a single solute molecule in your system but require a tpr file) or -pbc nojump. Always check you output simulation with vmd to be sure that the pbc are correctly solved.
 
 The atoms you choose for PathDetect-SOM must well describe the conformational changes for which you want to track the pathways. Let us assume you followed the unfolding of a protein through multiple replicas[^1]of steered MD simulation (SMD). In this case the conformational change involves the entire protein, so we should choose a set of atoms describing the whole protein. One obvious choice would be to use the set of Cα atoms of the protein. To extract the atom coordinates for frames of your simulations you can use the gromacs gmx traj command:
@@ -73,7 +74,7 @@ If your replicas are named with progressive numbers, you can set up a *for* cycl
 
 Selecting for all the replicas the group 3 present in the index.ndx file as output group.
 
-1. ## **Prepare your files and run PathDetect-SOM**
+3. ## **Prepare your files and run PathDetect-SOM**
 Once you have generated the xvg files containing the atom coordinates for the group of your interest, put all this files in a folder.
 
     mkdir coords/
