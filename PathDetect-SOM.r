@@ -30,7 +30,7 @@ if("--help" %in% args) {
       Optional Arguments:
       
       --skip      = 1             - Read lines with stride when reading coord files
-      --dim       = 8             - Dimension of the square SOM in neurons (default 8x8)
+      --dim       = 10            - Dimension of the square SOM in neurons (default 8x8)
       --topo      = hexagonal     - Choose between a hexagonal or rectangular shape of the neuron
       --periodic  = FALSE         - Choose wether the SOM grid is periodic across the boundaries or not (TRUE|FALSE)
       --dist      = "euclidean"   - Distance function to be used for the SOM calculation. Admissable values are: 
@@ -39,7 +39,7 @@ if("--help" %in% args) {
       --mode      = "pbatch"      - Type of learning algorithm: "online", "batch" or "pbatch".
       --ncores    = -1            - Number of cores to be used in caso of pbatch algorithm. 
                                     By default -1 is all available cores.
-      --nclust    = 6             - The number of clusters draw on the SOM
+      --nclust    = 10            - The number of clusters draw on the SOM
       --clus_met  = complete      - Type of hclust clustering method to be applied on neuron (complete, single, 
                                     average, mcquitty, median, centroid)
       --dist_clus = euclidean     - The distance passsed to hclust for the clustering of neuron. This must be one of:
@@ -47,20 +47,19 @@ if("--help" %in% args) {
       --path_clus = independent   - The type of pathway clustering. It could be "independent" or "dependend" from time.
                                     In the case of time dependent clustering, distances are computed between frames at the same
                                     time in the simulations, while with independent clustering distances are computed between frames 
-                                    of a simulation, and the clostest frame of the second simulation.
+                                    of a simulation, and the clostest frame of the other simulation.
       --colors    = default       - A file containing a set of 15 hex colors (one per line) to be used for the 
-                                    cluster colors in figures. By default a rainbow function is used.
+                                    cluster colors in figures. By default a set of 13 colors is used.
       --out       = SOM           - Output folder and prefix for the files (if do not exist is created)
-      --type      = RMSD          - Type of distance: 
+      --type      = dRMSD          - Type of distance:
                                     RMSD (sims needs to be pre-aligned) or dRMSD (molecules must be whole)
       --cont      = 0             - If a number (in nm) is given dRMSD, is computed only on distances between atoms forming
                                     contacts in the first frame.
       --lig       = FALSE         - If a range of numbers corresponding to the atoms of ligands within the selection used by 
                                     gmx traj is given (e.g. 181-199), the dRMSD is computed using only intermolecular distances.                     
-      --cutoff    = 0             - If a number (in nm) is given, distances greater than this value are set at the cutoff value
-      --graph     = FALSE         - Represent paths as graph (require igraph)
-      --SOM       = no            - If a SOM.Rdata file is supplied here, load it and only do the images
-      --data      = no            - If a COORD.Rdata or DIST. Rdata file is supplied here, load it and recompute SOM
+      --cutoff    = 0             - If a number (in nm) is given, distances greater than this value are set at the cutoff value (capping)
+      --data      = no            - If a COORD.Rdata or DIST.Rdata file is supplied here, load it and recompute SOM
+      --SOM       = no            - If a SOM.Rdata file is supplied here, load it and only do the analysis and images
       
       Example:
       PathDetect-SOM.r --folder=coords --rep 1,201,411,621,751 --dim=10 --out=SOM_001 --type=dRMSD --colors colors.dat \n\n')
@@ -91,7 +90,7 @@ readArgs <- function(args){
         argsL$skip="1"
     }
     if(is.null(argsL$dim)) {
-        argsL$dim="8"
+        argsL$dim="10"
     }
     if(is.null(argsL$topo)) {
         argsL$topo="hexagonal"
@@ -112,7 +111,7 @@ readArgs <- function(args){
         argsL$ncores="-1"
     }
     if(is.null(argsL$nclus)) {
-        argsL$nclus="6"
+        argsL$nclus="10"
     }
     if(is.null(argsL$clus_met)) {
         argsL$clus_met="complete"
@@ -130,7 +129,7 @@ readArgs <- function(args){
         argsL$out="SOM"
     }
     if(is.null(argsL$type)) {
-        argsL$type="RMSD"
+        argsL$type="dRMSD"
     }
     if(is.null(argsL$cont)) {
         argsL$cont="0"
