@@ -771,7 +771,7 @@ write("GRO=\n", file=paste(FOLDER, "/Extract-Representatives.sh", sep=''), appen
 write(paste("gmx trjconv -f $SIM -s $GRO -sub REPRESENTATIVES.ndx -o REPRESENTATIVES.xtc <<EOC\n0\nEOC", sep=''), file=paste(FOLDER, "/Extract-Representatives.sh", sep=''), append=TRUE)
 
 ### Creates Files for the Extraction of FRAMES BELONGING TO EACH NEURON
-for(i in 1:max(NCLUS)){
+for(i in 1:nrow(SOM$grid$pts)){
     NUMs <- which(SOM$unit.classif==i)
     if(dir.exists(paste(FOLDER, sprintf("/Neuron_%04d", i), sep=''))==FALSE){
         dir.create(paste(FOLDER, sprintf("/Neuron_%04d", i), sep=''))
