@@ -1,8 +1,7 @@
 # PathDetect-SOM: 
 # A tool to analyze pathways from MD simulation on a trained SOM.
-A tool for the analysis of pathways sampled in molecular dynamics simulations based on Self-Organizing Maps (SOM)
+A tool based on Self-Organizing Maps (SOM) for the analysis of pathways sampled in molecular dynamics simulations.
 
-PathDetect-SOM (*Pathway Detection on SOM*) is a tool that makes it easy the training of SOM, and to track pathways on it. 
 1. ## **Requirements**
 In order to use the R tool, you will need:
 
