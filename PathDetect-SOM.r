@@ -615,6 +615,7 @@ if(SOM_file=="no"){
     save(SOM, file=paste(OUT, "/", OUT, "_SOM.Rdata", sep=''))
     cat(sprintf('\n Done'))
 } else{
+    cat(sprintf('\n Reading SOM...'))
     load(SOM_file)
 }
 
