@@ -702,6 +702,7 @@ FOLDER <- paste(OUT, "/", "Clusters", sep='')
 dir.create(FOLDER, showWarnings=FALSE)
 #Do Images for clusters in range 1-15
 for(i in 2:15){
+    SOM.hc_i <- cutree(hclust(dist(SOM$codes[[1]], method=DIST_CLUS), method=CLUS_METHOD), i)
     png(paste(FOLDER, "/", OUT, "_CLUS-", i, ".png", sep=''), width=2200, height=2200)
     par(cex=4)
     if(length(COL.SCALE) < i){
@@ -709,9 +710,9 @@ for(i in 2:15){
     } else{
         COL <- COL.SCALE
     }
-    COL <- COL[SOM.hc]
+    COL <- COL[SOM.hc_i]
     plot(SOM, type = "mapping", bgcol=COL, col=rgb(0,0,0,0), shape='straight')
-    add.cluster.boundaries(SOM, SOM.hc, lwd=10)
+    add.cluster.boundaries(SOM, SOM.hc_i, lwd=10)
     invisible(dev.off())
 }
 cat(" Done\n")
