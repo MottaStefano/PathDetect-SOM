@@ -854,7 +854,7 @@ if(NREP > 2){
             }
     }
     #Plot dendrograms
-    W=70*NREP
+    W=1000+50*NREP
     path.clust <- hclust(as.dist(MAT), method="complete")
     png(paste(FOLDER, "/", OUT, "_PATH_Clustering_dendrogram-complete.png", sep=''), width=W, height=2000)
     par(cex=5, lwd=5)
