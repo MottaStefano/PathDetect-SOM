@@ -22,13 +22,6 @@ To install R libraries simply open the R console by typing R on the terminal and
     install.packages(cluster)
     install.packages(igraph)
 
-Then exit from the command line with q() or ctrl+d.
-
-To install Gromacs ([www.gromacs.org](http://www.gromacs.org/)) on a ubuntu machine simply run:
-
-    sudo apt -y install gromacs
-
-
 
 
 2. ## **Generate your first Gromacs Coordinate File**
