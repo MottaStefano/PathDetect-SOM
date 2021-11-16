@@ -5,17 +5,15 @@ A tool based on Self-Organizing Maps (SOM) for the analysis of pathways sampled 
 1. ## **Requirements**
 In order to use the R tool, you will need:
 
-- R installed (tested on R version 3.4.4)
+- R (≥ 3.4)
 - The following R libraries:
-  - kohonen
-  - parallel
-  - cluster
-  - igraph
+  - kohonen (≥ 3.01)
+  - parallel (≥ 3.4)
+  - cluster (≥ 2.0.6)
+  - igraph (≥ 1.2.4)
 - A Gromacs installation (tested on 2018.1)
 
-To install R ([www.r-project.org](http://www.r-project.org)) you can simply do:
-
-    sudo apt -y install r-base
+To install R: [www.r-project.org](http://www.r-project.org)
 
 To install R libraries simply open the R console by typing R on the terminal and run:
 
