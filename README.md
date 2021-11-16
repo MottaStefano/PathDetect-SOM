@@ -11,9 +11,9 @@ In order to use the R tool, you will need:
   - parallel (≥ 3.4)
   - cluster (≥ 2.0.6)
   - igraph (≥ 1.2.4)
-- A Gromacs installation (tested on 2018.1)
+- Gromacs
 
-To install R: [www.r-project.org](http://www.r-project.org)
+R is available at: [www.r-project.org](http://www.r-project.org)
 
 To install R libraries simply open the R console by typing R on the terminal and run:
 
@@ -22,6 +22,7 @@ To install R libraries simply open the R console by typing R on the terminal and
     install.packages(cluster)
     install.packages(igraph)
 
+Gromacs is available at: [https://www.gromacs.org/](https://www.gromacs.org)
 
 
 2. ## **Generate your first Gromacs Coordinate File**
