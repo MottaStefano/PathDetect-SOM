@@ -13,7 +13,7 @@ if(length(args) < 1) {
 ## Help section
 if("--help" %in% args) {
   cat('
-      SOM_Path.r
+      PathDetect-SOM.r
       
       With this command you can train a SOM over data present in a specific folder. This data must be atom coordinates
       in the xvg format extracted with the GROMACS gmx traj command. You can use this script to compare patways sampled
