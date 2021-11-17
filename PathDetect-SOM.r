@@ -16,7 +16,6 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
 ###Parser
 
 ## Collect arguments
@@ -30,57 +29,58 @@ if(length(args) < 1) {
 ## Help section
 if("--help" %in% args) {
   cat('
-      PathDetect-SOM.r
-      
+      SOM_Path.r
+
       With this command you can train a SOM over data present in a specific folder. This data must be atom coordinates
       in the xvg format extracted with the GROMACS gmx traj command. You can use this script to compare patways sampled
       in multiple replicas of simulations (like Steered MD). In this case you should provide the number of replicas with
       --rep (if the simulations have the same number of frames) or the first frame of each replica considering all
       simulations contatenated.
-      
+
       Mandatory Arguments:
       --folder    - The Input folder for the xvg files. All xvg files present in the folder will be read alphabetically.
-      --rep       - The number of replicas performed. If they are not of the same length a comma separated (no space) 
-                    string with the frame at wich sepate paths can be supplied. (Considering all simulations 
+      --rep       - The number of replicas performed. If they are not of the same length a comma separated (no space)
+                    string with the frame at wich sepate paths can be supplied. (Considering all simulations
                     concatenated with the skip) e.g. --rep 1,201,411,621,751.
-      
+
       Optional Arguments:
-      
+
       --skip      = 1             - Read lines with stride when reading coord files
       --dim       = 10            - Dimension of the square SOM in neurons (default 8x8)
       --topo      = hexagonal     - Choose between a hexagonal or rectangular shape of the neuron
       --periodic  = FALSE         - Choose wether the SOM grid is periodic across the boundaries or not (TRUE|FALSE)
-      --dist      = "euclidean"   - Distance function to be used for the SOM calculation. Admissable values are: 
+      --dist      = "euclidean"   - Distance function to be used for the SOM calculation. Admissable values are:
                                     "sumofsquares", "euclidean", "manhattan", and "tanimoto".
       --tr_step   = 5000          - Length of SOM training
       --mode      = "pbatch"      - Type of learning algorithm: "online", "batch" or "pbatch".
-      --ncores    = -1            - Number of cores to be used in caso of pbatch algorithm. 
+      --ncores    = -1            - Number of cores to be used in caso of pbatch algorithm.
                                     By default -1 is all available cores.
       --nclust    = 10            - The number of clusters draw on the SOM
-      --clus_met  = complete      - Type of hclust clustering method to be applied on neuron (complete, single, 
+      --clus_met  = complete      - Type of hclust clustering method to be applied on neuron (complete, single,
                                     average, mcquitty, median, centroid)
       --dist_clus = euclidean     - The distance passsed to hclust for the clustering of neuron. This must be one of:
                                     euclidean, maximum, manhattan, canberra, binary or minkowski.
       --path_clus = independent   - The type of pathway clustering. It could be "independent" or "dependend" from time.
                                     In the case of time dependent clustering, distances are computed between frames at the same
-                                    time in the simulations, while with independent clustering distances are computed between frames 
+                                    time in the simulations, while with independent clustering distances are computed between frames
                                     of a simulation, and the clostest frame of the other simulation.
-      --colors    = default       - A file containing a set of 15 hex colors (one per line) to be used for the 
+      --colors    = default       - A file containing a set of 15 hex colors (one per line) to be used for the
                                     cluster colors in figures. By default a set of 13 colors is used.
       --out       = SOM           - Output folder and prefix for the files (if do not exist is created)
       --type      = dRMSD          - Type of distance:
                                     RMSD (sims needs to be pre-aligned) or dRMSD (molecules must be whole)
       --cont      = 0             - If a number (in nm) is given dRMSD, is computed only on distances between atoms forming
                                     contacts in the first frame.
-      --lig       = FALSE         - If a range of numbers corresponding to the atoms of ligands within the selection used by 
-                                    gmx traj is given (e.g. 181-199), the dRMSD is computed using only intermolecular distances.                     
+      --lig       = FALSE         - If a range of numbers corresponding to the atoms of ligands within the selection used by
+                                    gmx traj is given (e.g. 181-199), the dRMSD is computed using only intermolecular distances.
       --cutoff    = 0             - If a number (in nm) is given, distances greater than this value are set at the cutoff value (capping)
       --data      = no            - If a COORD.Rdata or DIST.Rdata file is supplied here, load it and recompute SOM
       --SOM       = no            - If a SOM.Rdata file is supplied here, load it and only do the analysis and images
-      
+      --seed      = -1            - Set random seed to a value. When set to -1, a pseudo random seed is used
+
       Example:
       PathDetect-SOM.r --folder=coords --rep 1,201,411,621,751 --dim=10 --out=SOM_001 --type=dRMSD --colors colors.dat \n\n')
- 
+
   q(save="no")
 }
 
@@ -166,6 +166,9 @@ readArgs <- function(args){
     if(is.null(argsL$data)) {
         argsL$data="no"
     }
+    if(is.null(argsL$seed)) {
+        argsL$seed="-1"
+    }
     return(argsL)
 }
 
@@ -249,7 +252,7 @@ SetColors <- function(COLORS, NCLUS){
             COL.SCALE <- rainbow(NCLUS)
         }
     } else {
-        if(NCLUS < 13){
+        if(NCLUS < 14){
             COL.SCALE <- c("#1f78b4", "#33a02c", "#e31a1c", "#ff7f00", "#6a3d9a", "#a0451f", "#96c3dc", "#a4db77", "#ffff88", "#bea0cc", "#747474", "#f88587", "#fbb25c")
         } else {
             COL.SCALE <- rainbow(NCLUS)
@@ -345,7 +348,7 @@ NeuronRepres <- function(SOM){
         if(length(SET)==0){
             REPRESENTATIVE <- c(REPRESENTATIVE, 0)
         } else{
-            REPRESENTATIVE <- c(REPRESENTATIVE, SET[which(SOM$distances[SET]==min(SOM$distances[SET]))])
+            REPRESENTATIVE <- c(REPRESENTATIVE, SET[which(SOM$distances[SET]==min(SOM$distances[SET]))[1]])
         }
     }
     return(REPRESENTATIVE)
@@ -545,6 +548,14 @@ CUT         <- as.numeric(argsL$cut)
 GRAPH       <- argsL$graph
 SOM_file    <- argsL$SOM
 DATA        <- argsL$data
+SEED        <- argsL$seed
+
+#Set random seed
+if(SEED=="-1"){
+    SEED <- sample(1:2^25, 1)
+}
+set.seed(as.integer(SEED))
+
 if(length(REP)==1){
     NREP <- as.integer(REP)
 } else {
@@ -562,11 +573,11 @@ PARAMS <- cbind(c("--folder     = ", "--rep        = ", "--skip       = ",
                   "--dist_clus  = ", "--path_clus  = ", "--colors     = ",
                   "--out        = ", "--type       = ", "--cont       = ",
                   "--lig        = ", "--cutoff     = ", "--graph      = ",
-                  "--SOM        = ", "--data       = "),
+                  "--SOM        = ", "--data       = ", "--seed       = "),
                 c(FOLDER , paste(REP, collapse=',') , SKIP , DIM , TOPO ,
                   PERIODIC , DISTANCE , RLEN , MODE , NCORES , NCLUS ,
                   CLUS_METHOD, DIST_CLUS , PATH_CLUS , COLORS , OUT ,
-                  TYPE , CONT , LIG , CUT , GRAPH , SOM_file , DATA))
+                  TYPE , CONT , LIG , CUT , GRAPH , SOM_file , DATA, SEED))
 write.table(PARAMS, file=paste(OUT, "/", OUT, "_PARAMETERS.dat", sep=''), row.names=FALSE, col.names=FALSE, quote=FALSE)
 
 
@@ -592,7 +603,7 @@ if(SOM_file=="no"){
             #Rotate the matrix
             DIST <- t(DIST)
             cat(sprintf('\n Saving DIST Matrix..'))
-            save(DIST, file=paste(OUT, "DIST.Robj", sep=''))
+            save(DIST, file=paste(OUT, "_DIST.Robj", sep=''))
         }
         if(TYPE=="RMSD"){
             #Read and store atom coordinates
@@ -602,7 +613,7 @@ if(SOM_file=="no"){
                 Read_coordinates(FILES[N], SKIP)
             }
             cat(sprintf('\n Saving COORD Matrix..'))
-            save(COORDS, file=paste(OUT, "COORDS.Robj", sep=''))
+            save(COORDS, file=paste(OUT, "_COORDS.Robj", sep=''))
         }
         cat(sprintf('\n Done'))
     } else{
@@ -773,9 +784,6 @@ dir.create(FOLDER, showWarnings=FALSE)
 #Compute the representative frame for each neuron
 REPRESENTATIVE <- NeuronRepres(SOM)
 #Write files for the extraction of neurons representative frame
-write("#!/bin/bash", file=paste(FOLDER, "/Extract_Frames.sh", sep=''))
-write("SIM=", file=paste(FOLDER, "/Extract_Frames.sh", sep=''), append=TRUE)
-write("GRO=\n", file=paste(FOLDER, "/Extract_Frames.sh", sep=''), append=TRUE)
 invisible(suppressWarnings(file.remove(paste(FOLDER, "/REPRESENTATIVES.ndx", sep=''))))
 invisible(file.create(paste(FOLDER, "/REPRESENTATIVES.ndx", sep='')))
 for(i in 1:length(REPRESENTATIVE)){
@@ -790,6 +798,9 @@ write("GRO=\n", file=paste(FOLDER, "/Extract-Representatives.sh", sep=''), appen
 write(paste("gmx trjconv -f $SIM -s $GRO -sub REPRESENTATIVES.ndx -o REPRESENTATIVES.xtc <<EOC\n0\nEOC", sep=''), file=paste(FOLDER, "/Extract-Representatives.sh", sep=''), append=TRUE)
 
 ### Creates Files for the Extraction of FRAMES BELONGING TO EACH NEURON
+write("#!/bin/bash", file=paste(FOLDER, "/Extract-Frames.sh", sep=''))
+write("SIM=", file=paste(FOLDER, "/Extract-Frames.sh", sep=''), append=TRUE)
+write("GRO=\n", file=paste(FOLDER, "/Extract-Frames.sh", sep=''), append=TRUE)
 for(i in 1:nrow(SOM$grid$pts)){
     NUMs <- which(SOM$unit.classif==i)
     if(dir.exists(paste(FOLDER, sprintf("/Neuron_%04d", i), sep=''))==FALSE){
@@ -797,7 +808,7 @@ for(i in 1:nrow(SOM$grid$pts)){
     }
     WriteNDX(FILENAME=paste(FOLDER, sprintf("/Neuron_%04d/NEURON.ndx", i), sep=''),
              TITLE=sprintf("[ NEURON_%04d ]", i), NUMs=NUMs)
-    write(paste("cd ", sprintf("Neuron_%04d/\n", i), "gmx trjconv -f $SIM -s $GRO -sub NEURON.ndx -o NEURON.xtc <<EOC\n0\nEOC\ncd ..\n",     sep=''), file=paste(FOLDER, "/Extract_Frames.sh", sep=''), append=TRUE)
+    write(paste("cd ", sprintf("Neuron_%04d/\n", i), "gmx trjconv -f $SIM -s $GRO -sub NEURON.ndx -o NEURON.xtc <<EOC\n0\nEOC\ncd ..\n",     sep=''), file=paste(FOLDER, "/Extract-Frames.sh", sep=''), append=TRUE)
 }
 
 ### SOM with Neuron Numbering and cluster legend
@@ -871,7 +882,7 @@ if(NREP > 2){
             }
     }
     #Plot dendrograms
-    W=1000+50*NREP
+    W=1400+50*NREP
     path.clust <- hclust(as.dist(MAT), method="complete")
     png(paste(FOLDER, "/", OUT, "_PATH_Clustering_dendrogram-complete.png", sep=''), width=W, height=2000)
     par(cex=5, lwd=5)
@@ -889,7 +900,6 @@ if(NREP > 2){
     invisible(dev.off())
     cat(" Done\n")
 }
-
 
 
 ############################################ NETWORK BUILDING ############################################
@@ -911,10 +921,12 @@ write.table(d, paste(FOLDER, "/", OUT, "_Transition_Network.dat", sep=''), col.n
 D <- Network_noDiagonal(d)
 write.table(D, paste(FOLDER, "/", OUT, "_Transition_Network-noDiagonal.dat", sep=''), col.names=FALSE, row.names=FALSE)
 net <- Network2Graph(D, SOM, SOM.hc, COL.SCALE)
-write_graph(net, file=paste(FOLDER, "/", OUT, "_Transition_Network-noDiagonal.xml", sep=''), format="graphml")
+write_graph(net, file=paste(FOLDER, "/", OUT, "_Transition_Network-noDiagonal.graphml", sep=''), format="graphml")
 cat(" Done\n")
+
 ############################################ SAVE PROJECT ############################################
 #Save the project
 cat(" Saving Project...\n")
 save.image(paste(OUT, "/", OUT, "_SOM-Project.Rdata", sep=''))
 cat(" Done\n")
+
