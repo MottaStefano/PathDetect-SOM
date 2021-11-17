@@ -15,4 +15,4 @@ As a first step,
 
 
 
-[^1] Callea, L.; Bonati, L.; Motta, S. Metadynamics-Based Approaches for Modeling the Hypoxia-Inducible Factor 2α Ligand Binding Process. Journal of Chemical Theory and Computation 2021, 18. https://doi.org/10.1021/acs.jctc.1c00114.
+[^1]: Callea, L.; Bonati, L.; Motta, S. Metadynamics-Based Approaches for Modeling the Hypoxia-Inducible Factor 2α Ligand Binding Process. Journal of Chemical Theory and Computation 2021, 18. https://doi.org/10.1021/acs.jctc.1c00114.
