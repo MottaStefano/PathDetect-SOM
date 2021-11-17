@@ -22,9 +22,7 @@ Here we used a bash loop to perform the calculation over all the 15 replicas. Th
 In the second step, we will train a Self-Organizing Map using all the intermolecular distances between selected protein and ligand atoms. This can be done using the PathDetect-SOM script. To obtain an help page from the tool simply run:
 
     PathDetect-SOM.r
-
 or
-
     PathDetect-SOM.r --help
     
 The list of the available options will be printed. The mandatory arguments are --folder and --rep, with which one can indicate the folder for the xvg coordinate file and the number of replicas of the simulation. Other options that are usefull for the present case are:
@@ -55,7 +53,7 @@ The number of cluster (13 in this case) is specified with the option --nclus. Al
 
 At the end of the training procedure, each frame of the trajectories is assigned to a neuron of the map. Frames belonging to each neuron can be easily extracted using files within the "Neurons" sub-directory. To extract frames belonging to each neuron simply use the bash script "Extract_Frames.sh". You'll need a trajectory file (xtc or trr) of the simulation, with the same number of frames used to train the SOM. To generate this file simply do within the SIMS folder:[^2] 
 
-    gmx trjcat -f *.xtc -o Full_SIMs.xtc
+    gmx trjcat -f *.xtc -o Full_SIMs.xtc -cat
 
 The simulations will be concatenated in alphabetical order, so make sure that this is the same order of the xvg file in the COORDS folder.
 Open the "Extract_Frames.sh" file with a text editor and specify in the first two lines the location (please use absolute path and not relatives) of the concatenated trajectory and a reference file (.gro or .pdb). For example:
@@ -63,6 +61,27 @@ Open the "Extract_Frames.sh" file with a text editor and specify in the first tw
     SIM=/home/stefano/work/Tutorial/SIMS/Full_SIMs.xtc
     GRO=/home/stefano/work/Tutorial/SIMS/Protein-lig.gro
 
+Then simply run the bash script to extract frames belongin to each neuron in each corresponding sub-directory:
+
+    bash Extract_Frames.sh
+
+One may also be interested in having a single representative conformation for each neuron. To extract conformation representative of each neuron use the bash script "Extract-Representatives.sh". Open the file with a plain text editor and specify the location of the concatenated trajectory and a reference file as done with the previous file. Run the bash script to extract representative conformations:
+
+    bash Extract-Representatives.sh
+
+This will create a number of .xtc files (e.g. NEURON_0001.xtc) containing a single frame corresponding to the representative conformation for that neuron. You can convert the .xtc files in pdb with the following commands (change the path to the reference gro file in the second line):
+
+    mkdir Representatives
+    cp /home/stefano/work/Tutorial/SIMS/Protein-lig.gro Representatives
+    mkdir Representatives/XTC
+    mv NEURON_*.xtc Representatives/XTC
+    cd Representatives
+    for FILE in XTC/NEURON_*.xtc; do
+    gmx trjconv -f ${FILE} -s Protein-lig.gro -o ${FILE%.*}.pdb <<EOC
+    0
+    EOC
+    done
+    mv XTC/*.pdb .
 
 
 
