@@ -15,7 +15,7 @@ The index file for the case here presented is already present in the SIMS folder
     EOC
     done
 
-Here we used a bash loop to perform the calculation over all the 15 replicas. The output xvg files that contains the coordinates for the atoms of interest are saved in the COORDS folder.
+Here we used a bash loop to perform the calculation over all the 15 replicas. The output xvg files that contains the coordinates for the atoms of interest are saved in the COORDS folder. Note that the PathDetect-SOM tool will read the trajectoris in alphabetical order, so it is recomended to name the files with the same name followed by numbers with leading zeros.
 
 2. ## **Train the SOM**
 
@@ -49,8 +49,11 @@ In case the number of cluster chosen is different from the one used to train the
 
     PathDetect-SOM.r --folder=COORDS --rep=15 --lig=41-45 --type=dRMSD --cutoff=1.2 --nclus=13 --path_clus=dependent --SOM=SOM/SOM_SOM.Rdata --out=SOM_clus13
 
-The number of cluster (13 in this case) is specified with the option --nclus.
+The number of cluster (13 in this case) is specified with the option --nclus. All the images will be re-generated in another directory (SOM_clus13 as specified with the option --out).
 
+4. ## **Extract representative conformations**
 
+At the end of the training procedure, each frame of the trajectories is assigned to a neuron of the map. Frames belonging to each neuron can be easily extracted using files within the "Neurons" sub-directory. To extract frames belonging to each neuron simply use the bash script "Extract_Frames.sh". You'll need a trajectory file (xtc or trr) of the simulation, with the same number of frames used to train the SOM. To generate this file simply do within the SIMS folder gmx trjcat -f *.xtc -o Full_SIMs.xtc.
+Open this file with a text editor and specify in the first two lines the
 
 [^1]: Callea, L.; Bonati, L.; Motta, S. Metadynamics-Based Approaches for Modeling the Hypoxia-Inducible Factor 2α Ligand Binding Process. Journal of Chemical Theory and Computation 2021, 18. https://doi.org/10.1021/acs.jctc.1c00114.
