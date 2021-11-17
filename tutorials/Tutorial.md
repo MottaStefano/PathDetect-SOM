@@ -53,7 +53,18 @@ The number of cluster (13 in this case) is specified with the option --nclus. Al
 
 4. ## **Extract representative conformations**
 
-At the end of the training procedure, each frame of the trajectories is assigned to a neuron of the map. Frames belonging to each neuron can be easily extracted using files within the "Neurons" sub-directory. To extract frames belonging to each neuron simply use the bash script "Extract_Frames.sh". You'll need a trajectory file (xtc or trr) of the simulation, with the same number of frames used to train the SOM. To generate this file simply do within the SIMS folder gmx trjcat -f *.xtc -o Full_SIMs.xtc.
-Open this file with a text editor and specify in the first two lines the
+At the end of the training procedure, each frame of the trajectories is assigned to a neuron of the map. Frames belonging to each neuron can be easily extracted using files within the "Neurons" sub-directory. To extract frames belonging to each neuron simply use the bash script "Extract_Frames.sh". You'll need a trajectory file (xtc or trr) of the simulation, with the same number of frames used to train the SOM. To generate this file simply do within the SIMS folder:[^2] 
+
+gmx trjcat -f *.xtc -o Full_SIMs.xtc
+
+The simulations will be concatenated in alphabetical order, so make sure that this is the same order of the xvg file in the COORDS folder.
+Open the "Extract_Frames.sh" file with a text editor and specify in the first two lines the location (please use absolute path and not relatives) of the concatenated trajectory and a reference file (.gro or .pdb). For example:
+
+    SIM=/home/stefano/work/Tutorial/SIMS/Full_SIMs.xtc
+    GRO=/home/stefano/work/Tutorial/SIMS/Protein-lig.gro
+
+
+
 
 [^1]: Callea, L.; Bonati, L.; Motta, S. Metadynamics-Based Approaches for Modeling the Hypoxia-Inducible Factor 2α Ligand Binding Process. Journal of Chemical Theory and Computation 2021, 18. https://doi.org/10.1021/acs.jctc.1c00114.
+[^2]: If you used the option -skip, you'll need to apply the same stride to the trajectory!
