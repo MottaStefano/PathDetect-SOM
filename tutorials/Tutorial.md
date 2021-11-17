@@ -91,10 +91,17 @@ Finally, you may be interested in the representative conformation of each cluste
 
 The pathways of each replica is traced on the SOM and can be found within the folder "Paths". An example for the first replica is reported below:
 
-
-
 ![SOM_v5_clus13_Rep_0001_Path](https://user-images.githubusercontent.com/83405349/142215285-c2add146-f5e4-4441-b892-d1194d0c56a4.png)
 
+In this image the pathway of the simulation is depicted with small circles colored according to the simulation time (blue to red). This mean that the simulation started from the lower right angle of the map and ended in the top right angle.
+The dendrograms for the clustering of pathways can also be found within the same folder. Looking at the dendrogram with average-linkage, it is possible to identify the groups of simulations evolving in similar way (e.g. 9-15-12-5-14 or 13-4-1-6).
+
+![SOM_v5_clus13_PATH_Clustering_dendrogram-single](https://user-images.githubusercontent.com/83405349/142216080-de88a000-6eec-44a3-addf-a883075b1433.png)
+
+5. ## **Graph**
+
+From the transitions between couples of neurons an approximate transition matrix is built and a network in the graphml extension is saved. This can be found in the Transition_Matrix sub-folder (SOM_clus13_Transition_Network-noDiagonal.graphml).
+The graph can be visualized and analyzed with any graph viewer (e.g. cytoscape). More advanced network analysis can be performed within R using the igraph package and will be included in future release of the tool.
 
 
 [^1]: Callea, L.; Bonati, L.; Motta, S. Metadynamics-Based Approaches for Modeling the Hypoxia-Inducible Factor 2α Ligand Binding Process. Journal of Chemical Theory and Computation 2021, 18. https://doi.org/10.1021/acs.jctc.1c00114.
