@@ -83,6 +83,18 @@ This will create a number of .xtc files (e.g. NEURON_0001.xtc) containing a sing
     done
     mv XTC/*.pdb .
 
+This will create a pdb file with a representative conformation for each neuron. Note that some neurons may be empty, so no structures will be extracted for these neurons.
+
+Finally, you may be interested in the representative conformation of each cluster. In this case go to the folder "Clusters" and have a look at the "Cluster_Representatives.dat" file. This file contains the representative neuron for each cluster. You may use the representative structure of this neuron as the representative structure of the cluster.
+
+5. ## **Analysis of pathways**
+
+The pathways of each replica is traced on the SOM and can be found within the folder "Paths". An example for the first replica is reported below:
+
+
+
+![SOM_v5_clus13_Rep_0001_Path](https://user-images.githubusercontent.com/83405349/142215285-c2add146-f5e4-4441-b892-d1194d0c56a4.png)
+
 
 
 [^1]: Callea, L.; Bonati, L.; Motta, S. Metadynamics-Based Approaches for Modeling the Hypoxia-Inducible Factor 2α Ligand Binding Process. Journal of Chemical Theory and Computation 2021, 18. https://doi.org/10.1021/acs.jctc.1c00114.
