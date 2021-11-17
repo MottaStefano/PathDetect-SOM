@@ -40,7 +40,7 @@ To run the analysis:
 Due to the small dataset, the calculation would require just few minutes (depending on the hardware).
 At the end of the calculation within the folder COORDS, you will find other sub-folders containing files usefull for the analysis. 
 
-3. ## **Decide the number of cluster**
+3. ## **Choice of the clusters number**
 
 By default the SOM neurons are further clustered in 10 geometric clusters that represents macro-conformations of the system. However this value may not be the optimal number of cluster. To help users in deciding the optimal number of clusters, results for silhouette analysis are reported within the folder Clusters/Silhouette. For the case of the tutorial a good number of cluster could be 13 (a local maximum in the Silhouette profile (see file SOM_Silhouette-Score.png).
 In case the number of cluster chosen is different from the one used to train the SOM, one could read-in the trained SOM, and re-do the analysis with a different number of cluster. To read a trained SOM (and skip the training procedure) simply add the option --SOM and specify the location of the file SOM.Rdata within the output folder:
