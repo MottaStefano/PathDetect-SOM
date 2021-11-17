@@ -49,7 +49,7 @@ Select a group:
 
 Type “3” and press enter to choose the C-alpha atoms group. If you want to select a group of atoms that is not within the default groups, you can generate an index file with a personalized group of atoms. To do so use the command:
 
-    gmx make\_ndx -f Protein.gro -o index.ndx 
+    gmx make_ndx -f Protein.gro -o index.ndx 
 
 Now you can select a group of residues or atoms combining the commands of gmx make\_ndx. Atoms can be selected by name (e.g. a CB), or by number (e.g. a 1-20). You can select a residue (e.g. r 85), you can intersect two existing group selecting only atoms belonging to both groups (e.g. 10 & 3) or combine two groups (e.g. 10 | 11). Pay attention at this selection process because it is easy for beginners to make mistakes.
 
