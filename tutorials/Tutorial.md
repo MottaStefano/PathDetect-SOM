@@ -29,7 +29,11 @@ or
     
 The list of the available options will be printed. The mandatory arguments are --folder and --rep, with which one can indicate the folder for the xvg coordinate file and the number of replicas of the simulation. Other options that are usefull for the present case are:
 - --type       - In which we specify the type of feature to be used. In this case we want to train the SOM with distances among atoms and not directly with coordinates, so we will choose dRMSD.
-- --lig        - that specify that we are treating a ligand-protein 
+- --lig        - that specify that we are treating a ligand-protein system, and thus only intermolecular distances will be computed. Here the range of ligand atoms within the selection should be specified. In this case we have selected a total of 45 atoms, with the fist 40 atoms belonging to protein, and the last five to the ligand. For this reason here we specify the ligand atom range: 41-45.
+- --cutoff      - that specify the capping value in nanometers for the distances.
+- --path_clus   - that specify the type of pathway clustering. Here we use a time-dependent clustering because in steered MD the replicas evolves in parallel (at the same speed).
+- --out         - the name of the output folder (that will be automatically created by the tool).
+- 
 
 
 
