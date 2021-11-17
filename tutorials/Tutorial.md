@@ -5,9 +5,17 @@ In the SIMS folder you will find 15 replicas of steered MD simulations of a liga
 
 1. ## **Generate coordinate file**
 
-As a first step, 
+As a first step, coordinates for the atoms of interest should be extracted from the simulation. This require the construction of an index file using the gmx make_ndx tool, creating a group that contains the atoms of interest. The index file for the case here presented is already present in the SIMS folder. Then the atoms coordinates can be extracted
+using the gromacs command gmx traj:
 
+    mkdir COORDS
+    for REP in {01..15}; do
+    gmx traj -f SIMS/Rep_${REP}.xtc -s SIMS/Protein-lig.gro -ox COORDS/coord-${REP}.xvg -n SIMS/index.ndx <<EOC
+    16
+    EOC
+    done
 
+Here we used a bash loop to perform the calculation over all the 15 replicas. The output xvg files that contains the coordinates for the atoms of interest are saved in the COORDS folder.
 
 
 
