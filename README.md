@@ -101,6 +101,7 @@ Other options accepted by PathDetect-SOM tool are:
 - --cutoff In case you are using the option –-type=dRMSD, distances greater than this value are set at the cutoff value (capping).
 - --data A .Rdata object file contained the distance or the coordinates file would be read as input avoiding PathDetect-SOM to re-read the xvg files.
 - --SOM A .Rdata object file containing a trained SOM would be read as input. It is useful in case you have already computed the SOM once and you want to simply modify a color, or the number of clusters.
+- --seed A value for the random seed. This is usefull for reproducibility. By default a random number will be used.
                                                                             
 
 [^1]: The use of multiple SMD replicas is advisable due to the non-deterministic nature of SMD
