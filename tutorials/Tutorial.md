@@ -28,8 +28,8 @@ or
     PathDetect-SOM.r --help
     
 The list of the available options will be printed. The mandatory arguments are --folder and --rep, with which one can indicate the folder for the xvg coordinate file and the number of replicas of the simulation. Other options that are usefull for the present case are:
-- --type        In which we specify the type of feature to be used. In this case we want to train the SOM with distances among atoms and not directly with coordinates, so we will choose dRMSD.
-- --lig     that specify that we are treating a ligand-protein 
+- --type       - In which we specify the type of feature to be used. In this case we want to train the SOM with distances among atoms and not directly with coordinates, so we will choose dRMSD.
+- --lig        - that specify that we are treating a ligand-protein 
 
 
 
