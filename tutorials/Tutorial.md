@@ -33,7 +33,23 @@ The list of the available options will be printed. The mandatory arguments are -
 - --cutoff      - that specify the capping value in nanometers for the distances.
 - --path_clus   - that specify the type of pathway clustering. Here we use a time-dependent clustering because in steered MD the replicas evolves in parallel (at the same speed).
 - --out         - the name of the output folder (that will be automatically created by the tool).
-- 
+- --seed        - The random seed for the calculation. This is usefull to ensure reproducibilty.
+
+To run the analysis:
+
+    PathDetect-SOM.r --folder=COORDS --rep=15 --type=dRMSD --lig=41-45 --cutoff=1.2 --path_clus=dependent --out=SOM --seed=30076
+
+Due to the small dataset, the calculation would require just few minutes (depending on the hardware).
+At the end of the calculation within the folder COORDS, you will find other sub-folders containing files usefull for the analysis. 
+
+3. ## **Decide the number of cluster**
+
+By default the SOM neurons are further clustered in 10 geometric clusters that represents macro-conformations of the system. However this value may not be the optimal number of cluster. To help users in deciding the optimal number of clusters, results for silhouette analysis are reported within the folder Clusters/Silhouette. For the case of the tutorial a good number of cluster could be 13 (a local maximum in the Silhouette profile (see file SOM_Silhouette-Score.png).
+In case the number of cluster chosen is different from the one used to train the SOM, one could read-in the trained SOM, and re-do the analysis with a different number of cluster. To read a trained SOM (and skip the training procedure) simply add the option --SOM and specify the location of the file SOM.Rdata within the output folder:
+
+    PathDetect-SOM.r --folder=COORDS --rep=15 --lig=41-45 --type=dRMSD --cutoff=1.2 --nclus=13 --path_clus=dependent --SOM=SOM/SOM_SOM.Rdata --out=SOM_clus13
+
+The number of cluster (13 in this case) is specified with the option --nclus.
 
 
 
