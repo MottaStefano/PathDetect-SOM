@@ -96,7 +96,8 @@ The pathways of each replica is traced on the SOM and can be found within the fo
 In this image the pathway of the simulation is depicted with small circles colored according to the simulation time (blue to red). This mean that the simulation started from the lower right angle of the map and ended in the top right angle.
 The dendrograms for the clustering of pathways can also be found within the same folder. Looking at the dendrogram with average-linkage, it is possible to identify the groups of simulations evolving in similar way (e.g. 9-15-12-5-14 or 13-4-1-6).
 
-![SOM_v5_clus13_PATH_Clustering_dendrogram-single](https://user-images.githubusercontent.com/83405349/142216080-de88a000-6eec-44a3-addf-a883075b1433.png)
+![SOM_v5_clus13_PATH_Clustering_dendrogram-average](https://user-images.githubusercontent.com/83405349/142217007-6742b4b8-74d4-41ba-88eb-17296e028c40.png)
+
 
 5. ## **Graph**
 
